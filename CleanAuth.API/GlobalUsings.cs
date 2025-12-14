@@ -1,0 +1,33 @@
+// Global using directives
+
+global using System;
+global using System.Collections.Concurrent;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Net;
+global using System.Security.Claims;
+global using System.Security.Cryptography;
+global using System.Text;
+global using System.Text.Json;
+global using FluentValidation;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using MimeKit;
+global using CleanAuth.API.Common;
+global using CleanAuth.API.Configs;
+global using CleanAuth.API.Data;
+global using CleanAuth.API.DTOs;
+global using CleanAuth.API.Entities;
+global using CleanAuth.API.Enums;
+global using CleanAuth.API.Exceptions;
+global using CleanAuth.API.Extensions;
+global using CleanAuth.API.Middlewares;
+global using CleanAuth.API.Repositories;
+global using CleanAuth.API.Services;
+global using CleanAuth.API.Validators;
+global using MailKit.Net.Smtp;
+global using MailKit.Security;
+global using Microsoft.EntityFrameworkCore.Migrations;
+global using MimeKit.Text;
