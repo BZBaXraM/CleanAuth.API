@@ -312,7 +312,7 @@ export EmailConfig__Password="your-email-password"
 
 ## 👨‍💻 Author
 
-**Your Name**
+**Bahram Bayramzade**
 
 - GitHub: [@BZBaXraM](https://github.com/BZBaXraM)
 - Email: baxram1997007@gmail.com
