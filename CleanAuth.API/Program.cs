@@ -7,9 +7,11 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
+// Database
 builder.Services.AddDbContext<AuthContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")
+                      ?? builder.Configuration.GetConnectionString("DockerConnection"));
 });
 
 // Middlewares

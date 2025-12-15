@@ -63,7 +63,7 @@
 ### Prerequisites
 
 - .NET 10 SDK
-- PostgreSQL
+- Docker & Docker Compose (for database)
 - SMTP server (Gmail/Outlook)
 
 ### Installation
@@ -71,18 +71,32 @@
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/CleanAuth.API.git
+git clone https://github.com/BZBaXraM/CleanAuth.API.git
 cd CleanAuth.API
 ```
 
-2. **Setup database**
+2. **Start PostgreSQL with Docker Compose**
 
 ```bash
-# Update connection string in appsettings.json
+# Start the database container
+docker compose up -d
+
+# The database will be available at:
+# Host: localhost
+# Port: 5432
+# Database: AuthDb
+# Username: postgres
+# Password: toor
+```
+
+3. **Setup database**
+
+```bash
+# Run migrations to create tables
 dotnet ef database update
 ```
 
-3. **Configure Email**
+4. **Configure Email**
 
 ```json
 {
@@ -96,10 +110,26 @@ dotnet ef database update
 }
 ```
 
-4. **Run the application**
+5. **Run the application**
 
 ```bash
 dotnet run
+```
+
+### Docker Commands
+
+```bash
+# Start database
+docker compose up -d
+
+# Stop database
+docker compose down
+
+# View logs
+docker compose logs auth-db
+
+# Remove database with data
+docker compose down -v
 ```
 
 ## 📡 API Endpoints
@@ -281,7 +311,7 @@ CleanAuth.API/
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=cleanauth;Username=postgres;Password=password"
+    "DefaultConnection": "Host=localhost;Database=AuthDb;Username=postgres;Password=toor"
   },
   "JWT": {
     "Secret": "your-super-secret-jwt-key-here-must-be-long-enough"
@@ -305,10 +335,38 @@ CleanAuth.API/
 ### Environment Variables
 
 ```bash
-export ConnectionStrings__DefaultConnection="your-db-connection"
+export ConnectionStrings__DefaultConnection="Host=localhost;Database=AuthDb;Username=postgres;Password=toor"
 export JWT__Secret="your-jwt-secret"
 export EmailConfig__Password="your-email-password"
 ```
+
+## 🐳 Docker Setup
+
+The project includes a `compose.yaml` file for easy PostgreSQL setup:
+
+```yaml
+services:
+  auth--db:
+    container_name: auth-db
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=toor
+      - POSTGRES_DB=AuthDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+```
+
+**Database Connection Details:**
+
+- **Host:** localhost
+- **Port:** 5432
+- **Database:** AuthDb
+- **Username:** postgres
+- **Password:** toor
 
 ## 👨‍💻 Author
 
