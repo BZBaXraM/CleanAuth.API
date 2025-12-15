@@ -226,6 +226,23 @@ GET /api/account/me
 Authorization: Bearer your-jwt-token
 ```
 
+### 🕰️ Nostalgia
+
+#### Back to 2022
+
+```http
+GET /api/olddays/back-to-2022
+Authorization: Bearer your-jwt-token
+```
+
+**Response:**
+
+```json
+"Теплом так веет от старых комнат..."
+```
+
+A nostalgic endpoint that requires authentication and returns a poetic message in Russian.
+
 ## 🔒 Security
 
 ### Password Validation
@@ -285,7 +302,8 @@ public class AuthResult : Result
 ```
 CleanAuth.API/
 ├── 📁 Controllers/          # API controllers
-│   └── AccountController.cs # Clean controller (only service calls)
+│   ├── AccountController.cs # Clean controller (only service calls)
+│   └── OldDaysController.cs # Nostalgic endpoint controller
 ├── 📁 Services/             # Business logic
 │   ├── AccountService.cs    # Main authentication service
 │   ├── EmailService.cs      # Email sending service
