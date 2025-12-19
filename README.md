@@ -34,21 +34,21 @@ Demonstration microservice using JWT library for authorization
 - **🔒 JWT Authentication** - with refresh tokens and blacklist
 - **✅ Result Pattern** - elegant error handling without exceptions
 - **🛡️ FluentValidation** - strict validation of all input data
-- **� Structured Logging** - detailed logging of all operations
-- **� BCTrypt** - reliable password hashing
+- **📊 Structured Logging** - detailed logging of all operations
+- **🔐 BCrypt** - reliable password hashing
 
 ### JwtAuthForMicroservice
 
-- **� Reрusable Library** - easy integration into any microservice
-- **�️ JWT tMiddleware** - automatic token processing
+- **🔧 Reusable Library** - easy integration into any microservice
+- **🛡️ JWT Middleware** - automatic token processing
 - **⚡ Easy Setup** - simple registration via extension methods
 - **🔍 Token Validation** - signature verification and claims extraction
 
 ### MiniMicroservice.API
 
-- **� ProteMcted Endpoints** - all APIs require authorization
+- **🔐 Protected Endpoints** - all APIs require authorization
 - **👥 User Management** - demonstration functionality
-- **� Ready to Use** - example of JWT library integration
+- **🚀 Ready to Use** - example of JWT library integration
 
 ## 🏛️ System Architecture
 
@@ -61,7 +61,7 @@ Demonstration microservice using JWT library for authorization
                 │                       │                       │
                 ▼                       ▼                       ▼
 ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
-│   CleanAuth.API     │    │JwtAuthForMicroservice│    │ MiniMicroservice.API│
+│   CleanAuth.API     │    │JwtAuthForMicroservice│   │ MiniMicroservice.API│
 │                     │    │                     │    │                     │
 │ ┌─────────────────┐ │    │ ┌─────────────────┐ │    │ ┌─────────────────┐ │
 │ │   Controllers   │ │    │ │  JwtRegister    │ │    │ │   Controllers   │ │
@@ -455,7 +455,7 @@ MiniMicroservice.API/
 └── MiniMicroservice.API.http # HTTP requests for testing
 ```
 
-## � Connfiguration
+## 🔧 Configuration
 
 ### CleanAuth.API - appsettings.json
 
