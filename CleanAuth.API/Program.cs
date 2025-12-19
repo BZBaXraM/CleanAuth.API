@@ -3,7 +3,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -22,7 +21,8 @@ builder.Services
     .AddScoped<RegisterRequestValidator>()
     .AddScoped<LoginRequestValidator>()
     .AddScoped<ConfirmEmailCodeDtoValidator>()
-    .AddScoped<RequestConfirmationCodeDtoValidator>();
+    .AddScoped<RequestConfirmationCodeDtoValidator>()
+    .AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
 // Configure Email
 EmailConfig emailConfig = new();
@@ -39,9 +39,6 @@ builder.Services
     .AddScoped<IJwtService, JwtService>()
     .AddSingleton<IEmailService, EmailService>()
     .AddSingleton<IBlackListService, BlackListService>();
-
-// Validators
-builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
 // JWT Authentication
 JwtConfig jwtConfig = new();

@@ -3,4 +3,6 @@
     <File Path="compose.yaml" />
   </Folder>
   <Project Path="CleanAuth.API\CleanAuth.API.csproj" />
+  <Project Path="JwtAuthForMicroservice/JwtAuthForMicroservice.csproj" />
+  <Project Path="MiniMicroservice.API/MiniMicroservice.API.csproj" />
 </Solution>
