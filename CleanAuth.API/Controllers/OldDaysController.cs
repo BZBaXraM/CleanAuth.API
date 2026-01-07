@@ -1,7 +1,6 @@
 namespace CleanAuth.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController, Authorize]
+[Route("api/[controller]"), ApiController, Authorize]
 public class OldDaysController : ControllerBase
 {
     [HttpGet("back-to-2022")]

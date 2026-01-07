@@ -2,6 +2,7 @@ namespace CleanAuth.API.Services;
 
 public class EmailService : IEmailService
 {
+    private const string Subject = "CleanAuth - Email Confirmation";
     private readonly SmtpClient _client;
     private readonly EmailConfig _config;
     private readonly ILogger<EmailService> _logger;
@@ -17,9 +18,9 @@ public class EmailService : IEmailService
     {
         try
         {
-            var emailMessage = new MimeMessage();
+            MimeMessage emailMessage = new();
 
-            emailMessage.From.Add(new MailboxAddress("Trontify", _config.From));
+            emailMessage.From.Add(new MailboxAddress("CleanAuth", _config.From));
             emailMessage.To.Add(new MailboxAddress("User", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(TextFormat.Html)
@@ -67,7 +68,6 @@ public class EmailService : IEmailService
 
     public async Task SendConfirmationEmailAsync(string email, string code)
     {
-        const string subject = "CleanAuth - Email Confirmation";
         var message = $"""
 
                                    <html>
@@ -81,6 +81,6 @@ public class EmailService : IEmailService
                                    </html>
                        """;
 
-        await SendEmailAsync(email, subject, message);
+        await SendEmailAsync(email, Subject, message);
     }
 }

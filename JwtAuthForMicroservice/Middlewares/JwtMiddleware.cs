@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace JwtAuthForMicroservice.Middlewares;
 
-public class JwtMiddleware(IAccessTokenService accessTokenService, ILogger<JwtMiddleware> logger) : IMiddleware
+public partial class JwtMiddleware(IAccessTokenService accessTokenService, ILogger<JwtMiddleware> logger) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -13,7 +13,7 @@ public class JwtMiddleware(IAccessTokenService accessTokenService, ILogger<JwtMi
         {
             var token = authHeader["Bearer ".Length..].Trim();
 
-            logger.LogInformation("Authorization header: {AuthHeader}, Extracted token: {Token}", authHeader, token);
+            LogAuthorizationHeaderAuthHeaderExtractedTokenToken(logger, authHeader, token);
 
             if (!string.IsNullOrWhiteSpace(token))
             {
@@ -24,17 +24,17 @@ public class JwtMiddleware(IAccessTokenService accessTokenService, ILogger<JwtMi
                 }
                 else
                 {
-                    logger.LogWarning("Invalid token format");
+                    LogInvalidTokenFormat(logger);
                 }
             }
             else
             {
-                logger.LogWarning("Token is null or empty");
+                LogTokenIsNullOrEmpty(logger);
             }
         }
         else
         {
-            logger.LogWarning("Authorization header is missing or not in the correct format");
+            LogAuthorizationHeaderIsMissingOrNotInTheCorrectFormat(logger);
         }
 
         await next(context);
@@ -48,18 +48,42 @@ public class JwtMiddleware(IAccessTokenService accessTokenService, ILogger<JwtMi
             if (principal != null)
             {
                 context.User = principal;
-                logger.LogInformation("User attached to context {Name}", context.User.Identity!.Name);
+                var name = context.User.Identity!.Name;
+                if (name == null) return;
+                LogUserAttachedToContextName(logger, name);
                 Console.WriteLine($"User attached to context {context.User.Identity.Name}");
             }
             else
             {
-                logger.LogWarning("Principal is null");
+                LogPrincipalIsNull(logger);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError("Error attaching user to context {ExMessage}", ex.Message);
+            LogErrorAttachingUserToContextExMessage(logger, ex.Message);
             Console.WriteLine($"Error attaching user to context {ex.Message}");
         }
     }
+
+    [LoggerMessage(LogLevel.Information, "Authorization header: {authHeader}, Extracted token: {token}")]
+    static partial void LogAuthorizationHeaderAuthHeaderExtractedTokenToken(ILogger<JwtMiddleware> logger,
+        string authHeader, string token);
+
+    [LoggerMessage(LogLevel.Warning, "Invalid token format")]
+    static partial void LogInvalidTokenFormat(ILogger<JwtMiddleware> logger);
+
+    [LoggerMessage(LogLevel.Warning, "Token is null or empty")]
+    static partial void LogTokenIsNullOrEmpty(ILogger<JwtMiddleware> logger);
+
+    [LoggerMessage(LogLevel.Warning, "Authorization header is missing or not in the correct format")]
+    static partial void LogAuthorizationHeaderIsMissingOrNotInTheCorrectFormat(ILogger<JwtMiddleware> logger);
+
+    [LoggerMessage(LogLevel.Information, "User attached to context {name}")]
+    static partial void LogUserAttachedToContextName(ILogger<JwtMiddleware> logger, string name);
+
+    [LoggerMessage(LogLevel.Warning, "Principal is null")]
+    static partial void LogPrincipalIsNull(ILogger<JwtMiddleware> logger);
+
+    [LoggerMessage(LogLevel.Error, "Error attaching user to context {exMessage}")]
+    static partial void LogErrorAttachingUserToContextExMessage(ILogger<JwtMiddleware> logger, string exMessage);
 }

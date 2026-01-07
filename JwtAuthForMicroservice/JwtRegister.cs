@@ -13,6 +13,8 @@ public static class JwtRegister
 {
     public static IServiceCollection RegisterJwt(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddLogging();
+        
         services.AddSingleton<IAccessTokenService, AccessTokenService>();
         services.AddScoped<JwtMiddleware>();
 

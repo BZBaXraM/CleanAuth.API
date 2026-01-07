@@ -11,7 +11,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User> AddUserAsync(User user)
     {
-        await _authContext.Users.AddAsync(user);
+        _authContext.Users.Add(user);
         await _authContext.SaveChangesAsync();
         return user;
     }

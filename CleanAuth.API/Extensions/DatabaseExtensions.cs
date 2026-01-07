@@ -8,6 +8,7 @@ public static class DatabaseExtensions
         var authContext = scope.ServiceProvider.GetRequiredService<AuthContext>();
 
         await authContext.Database.MigrateAsync();
+        
         await SeedAsync(authContext);
     }
 

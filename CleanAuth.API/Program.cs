@@ -1,7 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
@@ -40,6 +39,7 @@ builder.Services
     .AddSingleton<IEmailService, EmailService>()
     .AddSingleton<IBlackListService, BlackListService>();
 
+
 // JWT Authentication
 JwtConfig jwtConfig = new();
 builder.Configuration.GetSection("JWT").Bind(jwtConfig);
@@ -55,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+
 
 var app = builder.Build();
 
