@@ -1,0 +1,13 @@
+namespace CleanAuth.Application.Repositories;
+
+public interface IUserRepository
+{
+    User AddUser(User user);
+    Task<User?> GetByIdAsync(Guid id);
+    Task<User?> GetUserByEmailAsync(string email);
+    Task<User?> GetUserByUsernameAsync(string username);
+    Task<User?> GetUserByUsernameOrEmailAsync(string usernameOrEmail);
+    Task<User?> GetUserByRefreshTokenAsync(string refreshToken);
+    Task<User?> GetUserByConfirmationCodeAsync(string code);
+    Task<User?> GetUserByPasswordResetCodeAsync(string code);
+}

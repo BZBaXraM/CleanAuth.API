@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="compose.yaml" />
+  </Folder>
+  <Project Path="CleanAuth.API\CleanAuth.API.csproj" />
+  <Project Path="CleanAuth.Domain\CleanAuth.Domain.csproj" />
+  <Project Path="CleanAuth.Application\CleanAuth.Application.csproj" />
+  <Project Path="CleanAuth.Infrastructure\CleanAuth.Infrastructure.csproj" />
+</Solution>

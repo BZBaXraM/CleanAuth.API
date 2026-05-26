@@ -1,0 +1,16 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Security.Claims;
+global using FluentValidation;
+global using Microsoft.Extensions.Logging;
+global using CleanAuth.Domain.Common;
+global using CleanAuth.Domain.Entities;
+global using CleanAuth.Domain.Enums;
+global using CleanAuth.Domain.Exceptions;
+global using CleanAuth.Application.DTOs;
+global using CleanAuth.Application.Helpers;
+global using CleanAuth.Application.Repositories;
+global using CleanAuth.Application.Services;
+global using CleanAuth.Application.Validators;
+global using Microsoft.Extensions.DependencyInjection;

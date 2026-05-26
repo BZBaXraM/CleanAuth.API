@@ -1,0 +1,16 @@
+global using System.Net;
+global using System.Text.Json;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.OpenApi;
+global using CleanAuth.Domain.Common;
+global using CleanAuth.Domain.Exceptions;
+global using CleanAuth.Application.DTOs;
+global using CleanAuth.Application.Services;
+global using CleanAuth.Infrastructure.Data;
+global using CleanAuth.API.Middlewares;
+global using CleanAuth.Application;
+global using CleanAuth.Infrastructure;
+global using CleanAuth.Infrastructure.Extensions;
+global using Serilog;
