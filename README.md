@@ -293,4 +293,3 @@ Database: `localhost:5432`, db `AuthDb`, user `postgres`, password `postgres`
 ## Author
 
 **Bahram Bayramzade** — [@BZBaXraM](https://github.com/BZBaXraM) — baxram1997007@gmail.com
-# CleanAuth.API
