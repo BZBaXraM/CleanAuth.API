@@ -487,6 +487,3 @@ $RECYCLE.BIN/
 
 # Logs
 *.Logs
-
-# appsettings.json
-appsettings*.json
