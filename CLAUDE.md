@@ -62,6 +62,8 @@ HTTP → ExceptionMiddleware → BlackListMiddleware → Controller → AccountS
 
 - **Refresh tokens**: Stored on `User` as a base64-encoded random string, 7-day TTL. Rotated on every refresh call.
 
+- **`RememberMe`** (`LoginRequest.RememberMe`): optional bool, default `false`. When `true`, `JwtService.GenerateSecurityToken` issues a 30-day access token instead of the default `_config.Expiration` hours. Refresh token TTL is unaffected (always 7 days).
+
 - **JWT config** (`CleanAuth.Infrastructure/Configs/JwtConfig.cs`) is bound from `appsettings.json` section `"JWT"` and registered as a singleton in `AddInfrastructure()`. Uses HMAC-SHA512, audience/issuer validation is disabled.
 
 - **Database auto-migrate on startup**: `DatabaseExtensions.InitialiseDatabaseAsync()` (in `CleanAuth.Infrastructure/Extensions/`) runs `MigrateAsync()` + `SeedAsync()` in Development mode only.

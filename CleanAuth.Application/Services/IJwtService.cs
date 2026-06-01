@@ -5,7 +5,7 @@ public interface IJwtService
     /// <summary>
     /// Generate a security token
     /// </summary>
-    string GenerateSecurityToken(User user);
+    string GenerateSecurityToken(User user, bool rememberMe = false);
 
     /// <summary>
     /// Generate an email confirmation token

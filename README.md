@@ -10,7 +10,7 @@ Complete authentication service built with .NET 10 and PostgreSQL, structured as
 ## Features
 
 - Custom user management — no ASP.NET Core Identity dependency
-- JWT authentication with refresh token rotation and in-memory blacklist
+- JWT authentication with refresh token rotation, in-memory blacklist, and "Remember me" (30-day token)
 - Email verification with 6-char codes (5-minute TTL)
 - Password reset flow with 6-char codes (15-minute TTL)
 - `ResponseModel<T>` pattern — services never throw for business logic errors
@@ -166,9 +166,12 @@ Content-Type: application/json
 
 {
   "usernameOrEmail": "john_doe",
-  "password": "Password123!"
+  "password": "Password123!",
+  "rememberMe": false
 }
 ```
+
+`rememberMe`: optional, default `false`. When `true`, the access token is valid for 30 days instead of the default configured expiry (120 min). Refresh token TTL is always 7 days regardless.
 
 ```json
 {
@@ -274,7 +277,7 @@ dotnet ef migrations remove --project CleanAuth.Infrastructure --startup-project
 
 - Passwords: min 8 / max 30 chars, requires uppercase + lowercase + digit
 - Usernames: 3–20 chars, letters/digits/underscores only
-- JWT: HMAC-SHA512, configurable expiry (default 120 min)
+- JWT: HMAC-SHA512, configurable expiry (default 120 min); 30-day when `rememberMe: true`
 - Refresh tokens: 7-day TTL, rotated on every use
 - Token blacklist: in-memory only — revoked tokens become valid again on restart
 - Auto-migrate runs in Development only

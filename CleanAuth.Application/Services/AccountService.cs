@@ -96,7 +96,7 @@ public class AccountService : IAccountService
         await _uow.CommitAsync();
 
         var loginResponse = new LoginResponse(
-            _jwtService.GenerateSecurityToken(user),
+            _jwtService.GenerateSecurityToken(user, request.RememberMe),
             user.RefreshToken,
             user.RefreshTokenExpireTime
         );

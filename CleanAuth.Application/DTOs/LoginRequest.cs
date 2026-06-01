@@ -14,4 +14,9 @@ public class LoginRequest
     /// User's password
     /// </summary>
     public required string Password { get; set; }
+
+    /// <summary>
+    /// When true, the access token is valid for 30 days instead of the default expiry
+    /// </summary>
+    public bool RememberMe { get; set; }
 }

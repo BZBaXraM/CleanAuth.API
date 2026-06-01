@@ -11,10 +11,14 @@ public class JwtService : IJwtService
         _blackListService = blackListService;
     }
 
-    public string GenerateSecurityToken(User user)
+    public string GenerateSecurityToken(User user, bool rememberMe = false)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_config.Secret);
+
+        var expiry = rememberMe
+            ? DateTime.UtcNow.AddDays(30)
+            : DateTime.UtcNow.AddHours(_config.Expiration);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -22,7 +26,7 @@ public class JwtService : IJwtService
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
             ]),
-            Expires = DateTime.UtcNow.AddHours(_config.Expiration),
+            Expires = expiry,
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
         };

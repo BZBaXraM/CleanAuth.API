@@ -394,6 +394,21 @@
       margin: 0.5rem 0 1.5rem;
     }
 
+    /* ── Remember-me checkbox ───────────────────────────── */
+    #login-remember::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 2px; left: 5px;
+      width: 4px; height: 8px;
+      border: 2px solid #faf8f5;
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+    #login-remember:checked::after { opacity: 1; }
+
     /* ── Scrollbar ───────────────────────────────────────── */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -461,6 +476,22 @@
           </div>
           <div class="field"><label>Username or Email</label><input id="login-ident" placeholder="john_doe" /></div>
           <div class="field"><label>Password</label><input id="login-password" type="password" placeholder="Password123!" /></div>
+          <div class="field" style="display:flex;align-items:center;gap:0.65rem;margin-bottom:0.75rem;">
+            <input id="login-remember" type="checkbox" style="
+              width:16px;height:16px;flex-shrink:0;cursor:pointer;
+              appearance:none;-webkit-appearance:none;
+              background:var(--bg-input);
+              border:1.5px solid var(--border-mid);
+              border-radius:3px;
+              position:relative;transition:all 0.15s;
+            " onchange="
+              this.style.background = this.checked ? 'var(--accent)' : 'var(--bg-input)';
+              this.style.borderColor = this.checked ? 'var(--accent)' : 'var(--border-mid)';
+            " />
+            <label for="login-remember" style="margin:0;text-transform:none;font-size:0.8rem;letter-spacing:0;color:var(--text-main);cursor:pointer;user-select:none;">
+              Remember me <span style="color:var(--text-dim);font-size:0.7rem;">— 30-day token</span>
+            </label>
+          </div>
           <button class="btn btn-primary" onclick="login()">Sign in</button>
         </div>
 
@@ -688,9 +719,11 @@
   }
 
   async function login() {
+    const rememberMe = document.getElementById('login-remember').checked;
     const result = await api('POST', '/api/account/login', {
       usernameOrEmail: document.getElementById('login-ident').value,
       password:        document.getElementById('login-password').value,
+      rememberMe,
     });
     if (result?.data?.token) setTokens(result.data.token, result.data.refreshToken);
     show(result, 'POST /login');
