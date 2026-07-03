@@ -9,6 +9,8 @@ public class AccountService : IAccountService
     private readonly RegisterRequestValidator _registerRequestValidator;
     private readonly LoginRequestValidator _loginRequestValidator;
     private readonly ResetPasswordRequestValidator _resetPasswordRequestValidator;
+    private readonly ChangePasswordRequestValidator _changePasswordRequestValidator;
+    private readonly ChangeUsernameRequestValidator _changeUsernameRequestValidator;
     private readonly ILogger<AccountService> _logger;
 
     public AccountService(
@@ -19,6 +21,8 @@ public class AccountService : IAccountService
         RegisterRequestValidator registerRequestValidator,
         LoginRequestValidator loginRequestValidator,
         ResetPasswordRequestValidator resetPasswordRequestValidator,
+        ChangePasswordRequestValidator changePasswordRequestValidator,
+        ChangeUsernameRequestValidator changeUsernameRequestValidator,
         ILogger<AccountService> logger)
     {
         _uow = uow;
@@ -28,6 +32,8 @@ public class AccountService : IAccountService
         _registerRequestValidator = registerRequestValidator;
         _loginRequestValidator = loginRequestValidator;
         _resetPasswordRequestValidator = resetPasswordRequestValidator;
+        _changePasswordRequestValidator = changePasswordRequestValidator;
+        _changeUsernameRequestValidator = changeUsernameRequestValidator;
         _logger = logger;
     }
 
@@ -279,5 +285,66 @@ public class AccountService : IAccountService
         await _uow.CommitAsync();
 
         return ResponseModel.Success("Password reset successfully. You can now log in with your new password.");
+    }
+
+    public async Task<ResponseModel> ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
+    {
+        var validationResult = await _changePasswordRequestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+            return ResponseModel.Failure($"Validation failed: {errors}");
+        }
+
+        var user = await _uow.UserRepository.GetByIdAsync(userId);
+
+        if (user == null)
+            return ResponseModel.Failure("User not found");
+
+        if (!PasswordHelper.Verify(request.CurrentPassword, user.Password))
+            return ResponseModel.Failure("Current password is incorrect");
+
+        user.Password = PasswordHelper.Hash(request.NewPassword);
+        user.RefreshToken = null;
+        user.RefreshTokenExpireTime = DateTime.UtcNow;
+
+        await _uow.CommitAsync();
+
+        return ResponseModel.Success("Password changed successfully. Please log in again.");
+    }
+
+    public async Task<ResponseModel<UserResponse>> ChangeUsernameAsync(Guid userId, ChangeUsernameRequest request)
+    {
+        var validationResult = await _changeUsernameRequestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+            return ResponseModel.Failure<UserResponse>($"Validation failed: {errors}");
+        }
+
+        var user = await _uow.UserRepository.GetByIdAsync(userId);
+
+        if (user == null)
+            return ResponseModel.Failure<UserResponse>("User not found");
+
+        if (string.Equals(user.UserName, request.NewUsername, StringComparison.Ordinal))
+            return ResponseModel.Failure<UserResponse>("New username must be different from the current username");
+
+        var existing = await _uow.UserRepository.GetUserByUsernameAsync(request.NewUsername);
+        if (existing != null && existing.Id != user.Id)
+            return ResponseModel.Failure<UserResponse>("Username already exists");
+
+        user.UserName = request.NewUsername;
+
+        await _uow.CommitAsync();
+
+        var userDto = new UserResponse
+        {
+            Id = user.Id,
+            Email = user.Email,
+            UserName = user.UserName,
+        };
+
+        return ResponseModel.Success(userDto);
     }
 }

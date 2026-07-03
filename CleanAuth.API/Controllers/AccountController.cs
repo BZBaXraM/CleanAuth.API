@@ -128,4 +128,40 @@ public class AccountController : ControllerBase
 
         return StatusCode(result.StatusCode, result);
     }
+
+    /// <summary>
+    /// Change the password of the currently authenticated user
+    /// </summary>
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<ActionResult<ResponseModel>> ChangePasswordAsync([FromBody] ChangePasswordRequest request)
+    {
+        if (_currentUser.UserId is not { } id)
+        {
+            var failure = ResponseModel.Failure("Invalid user token");
+            return StatusCode(failure.StatusCode, failure);
+        }
+
+        var result = await _accountService.ChangePasswordAsync(id, request);
+
+        return StatusCode(result.StatusCode, result);
+    }
+
+    /// <summary>
+    /// Change the username of the currently authenticated user
+    /// </summary>
+    [HttpPost("change-username")]
+    [Authorize]
+    public async Task<ActionResult<ResponseModel<UserResponse>>> ChangeUsernameAsync([FromBody] ChangeUsernameRequest request)
+    {
+        if (_currentUser.UserId is not { } id)
+        {
+            var failure = ResponseModel.Failure<UserResponse>("Invalid user token");
+            return StatusCode(failure.StatusCode, failure);
+        }
+
+        var result = await _accountService.ChangeUsernameAsync(id, request);
+
+        return StatusCode(result.StatusCode, result);
+    }
 }

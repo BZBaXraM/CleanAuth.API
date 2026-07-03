@@ -565,6 +565,33 @@
           <button class="btn" onclick="resetPassword()">Reset password</button>
         </div>
 
+        <div class="card">
+          <div class="card-header">
+            <span class="method-badge post">POST</span>
+            <span class="card-title">Change Password</span>
+          </div>
+          <div class="field"><label>Current Password</label><input id="change-pw-current" type="password" placeholder="Password123!" /></div>
+          <div class="field"><label>New Password</label><input id="change-pw-new" type="password" placeholder="NewPassword123!" /></div>
+          <button class="btn" onclick="changePassword()">Change password</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="endpoint-group">
+      <p class="section-title">Profile</p>
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-header">
+            <span class="method-badge post">POST</span>
+            <span class="card-title">Change Username</span>
+          </div>
+          <div class="field"><label>New Username</label><input id="change-username-new" placeholder="new_john_doe" /></div>
+          <button class="btn" onclick="changeUsername()">Change username</button>
+        </div>
+
       </div>
     </div>
 
@@ -756,6 +783,24 @@
       newPassword: document.getElementById('reset-newpw').value,
     });
     show(result, 'POST /reset-password');
+  }
+
+  async function changePassword() {
+    if (!getToken()) { show({ error: 'Not logged in.' }, 'POST /change-password'); return; }
+    const result = await api('POST', '/api/account/change-password', {
+      currentPassword: document.getElementById('change-pw-current').value,
+      newPassword:     document.getElementById('change-pw-new').value,
+    }, true);
+    if (result?.isSucceeded) clearTokens();
+    show(result, 'POST /change-password');
+  }
+
+  async function changeUsername() {
+    if (!getToken()) { show({ error: 'Not logged in.' }, 'POST /change-username'); return; }
+    const result = await api('POST', '/api/account/change-username', {
+      newUsername: document.getElementById('change-username-new').value,
+    }, true);
+    show(result, 'POST /change-username');
   }
 
   async function refreshToken() {

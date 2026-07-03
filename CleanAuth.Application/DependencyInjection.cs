@@ -10,6 +10,8 @@ public static class DependencyInjection
             .AddScoped<ConfirmEmailCodeDtoValidator>()
             .AddScoped<RequestConfirmationCodeDtoValidator>()
             .AddScoped<ResetPasswordRequestValidator>()
+            .AddScoped<ChangePasswordRequestValidator>()
+            .AddScoped<ChangeUsernameRequestValidator>()
             .AddValidatorsFromAssemblyContaining<RegisterRequestValidator>()
             .AddScoped<IAccountService, AccountService>();
 

@@ -11,4 +11,6 @@ public interface IAccountService
     Task<ResponseModel<UserResponse>> GetUserByIdAsync(Guid userId);
     Task<ResponseModel> ForgetPasswordAsync(string email);
     Task<ResponseModel> ResetPasswordAsync(ResetPasswordRequest request);
+    Task<ResponseModel> ChangePasswordAsync(Guid userId, ChangePasswordRequest request);
+    Task<ResponseModel<UserResponse>> ChangeUsernameAsync(Guid userId, ChangeUsernameRequest request);
 }
