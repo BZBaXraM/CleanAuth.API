@@ -1,3 +1,5 @@
+using CleanAuth.Application.Extensions;
+
 namespace CleanAuth.Application.Services;
 
 public class AccountService : IAccountService
@@ -338,13 +340,6 @@ public class AccountService : IAccountService
 
         await _uow.CommitAsync();
 
-        var userDto = new UserResponse
-        {
-            Id = user.Id,
-            Email = user.Email,
-            UserName = user.UserName,
-        };
-
-        return ResponseModel.Success(userDto);
+        return ResponseModel.Success(user.ToUserDto());
     }
 }
