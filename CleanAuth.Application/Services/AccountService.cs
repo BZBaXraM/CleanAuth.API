@@ -13,7 +13,6 @@ public class AccountService : IAccountService
     private readonly ResetPasswordRequestValidator _resetPasswordRequestValidator;
     private readonly ChangePasswordRequestValidator _changePasswordRequestValidator;
     private readonly ChangeUsernameRequestValidator _changeUsernameRequestValidator;
-    private readonly ILogger<AccountService> _logger;
 
     public AccountService(
         IUnitOfWork uow,
@@ -24,8 +23,7 @@ public class AccountService : IAccountService
         LoginRequestValidator loginRequestValidator,
         ResetPasswordRequestValidator resetPasswordRequestValidator,
         ChangePasswordRequestValidator changePasswordRequestValidator,
-        ChangeUsernameRequestValidator changeUsernameRequestValidator,
-        ILogger<AccountService> logger)
+        ChangeUsernameRequestValidator changeUsernameRequestValidator)
     {
         _uow = uow;
         _jwtService = jwtService;
@@ -36,7 +34,6 @@ public class AccountService : IAccountService
         _resetPasswordRequestValidator = resetPasswordRequestValidator;
         _changePasswordRequestValidator = changePasswordRequestValidator;
         _changeUsernameRequestValidator = changeUsernameRequestValidator;
-        _logger = logger;
     }
 
     public async Task<ResponseModel> RegisterUserAsync(RegisterRequest request)
@@ -74,9 +71,8 @@ public class AccountService : IAccountService
             await _emailService.SendConfirmationEmailAsync(user.Email, user.EmailConfirmationCode);
             return ResponseModel.Success("Registration successful. Confirmation code sent to your email.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Failed to send confirmation email to {Email}", user.Email);
             return ResponseModel.Success(
                 "Registration successful, but failed to send confirmation email. Please request a new code.");
         }
@@ -160,9 +156,8 @@ public class AccountService : IAccountService
             await _emailService.SendConfirmationEmailAsync(user.Email, user.EmailConfirmationCode);
             return ResponseModel.Success("Confirmation code sent to your email.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Failed to send confirmation email to {Email}", user.Email);
             return ResponseModel.Failure("Failed to send confirmation email. Please try again later.");
         }
     }
@@ -218,17 +213,11 @@ public class AccountService : IAccountService
     {
         var user = await _uow.UserRepository.GetByIdAsync(userId);
 
-        if (user == null)
-            return ResponseModel.Failure<UserResponse>("User not found");
-
-        var userDto = new UserResponse
+        return user switch
         {
-            Id = user.Id,
-            Email = user.Email,
-            UserName = user.UserName,
+            null => ResponseModel.Failure<UserResponse>("User not found"),
+            _ => ResponseModel.Success(user.ToUserDto())
         };
-
-        return ResponseModel.Success(userDto);
     }
 
     public async Task<ResponseModel> ForgetPasswordAsync(string email)
@@ -251,9 +240,8 @@ public class AccountService : IAccountService
             await _emailService.SendPasswordResetEmailAsync(user.Email, user.PasswordResetCode);
             return ResponseModel.Success("Password reset code sent to your email.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Failed to send password reset email to {Email}", user.Email);
             return ResponseModel.Failure("Failed to send password reset email. Please try again later.");
         }
     }
